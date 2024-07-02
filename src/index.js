@@ -8,8 +8,33 @@
  */
 
 const combinationSumRecursive = (
-    
+  candidates,
+  remainingSum,
+  finalCombinations,
+  currentCombination,
+  startFrom
+) => {
+
+  if (remainingSum < 0) {
+    return; 
   }
+  if (remainingSum === 0) {
+    finalCombinations.push([...currentCombination]); // Se encontro una combinacion valida
+    return;
+  }
+  
+  for (let i = startFrom; i < candidates.length; i++) {
+    currentCombination.push(candidates[i]); 
+    combinationSumRecursive(
+      candidates,
+      remainingSum - candidates[i],
+      finalCombinations,
+      currentCombination,
+      i // Permitir repetir el mismo numero
+    );
+    currentCombination.pop(); // Remover el ultimo candidato
+  }
+};
   
   /**
    * Backtracking algorithm of finding all possible combination for specific sum.
@@ -19,7 +44,9 @@ const combinationSumRecursive = (
    * @return {number[][]}
    */
 const combinationSum = (candidates, target) => {
-    return combinationSumRecursive(candidates, target);
-  }
+  const finalCombinations = [];
+  combinationSumRecursive(candidates, target, finalCombinations, [], 0);
+  return finalCombinations;
+};
 
 module.exports = combinationSum;
